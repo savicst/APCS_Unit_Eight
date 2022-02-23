@@ -7,7 +7,7 @@ public class ThreeByThree {
         double [][] list = new double[3][3];
 
 //code to output all original values
-
+        System.out.println(list[0][0]);
 
 //code to change five of the values to positive
 
