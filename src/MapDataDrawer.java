@@ -92,21 +92,107 @@ public class MapDataDrawer
      * @return the total change in elevation traveled from West-to-East
      */
     public int drawLowestElevPath(Graphics g, int row){
-        g.setColor(new Color(242, 148, 234));
+        //g.setColor(new Color(242, 148, 234));
+
+        g.fillRect(0,row,1,1);
         int currentRow = row;
-        for(int col=0; col< grid[row].length; col++){
+        int totalElevChange = 0;
+        for(int col=0; col< grid[row].length-1; col++){
             int currentElev = grid[currentRow][col];
-            if(Math.abs(currentElev - grid[currentRow][col+1]> );
-            currentRow++;
+
+            //top
+            if (currentRow == 0){
+                int down = Math.abs(currentElev - grid[currentRow + 1][col + 1]);
+                int forward = Math.abs(currentElev - grid[currentRow][col + 1]);
+                if (down < forward){
+                    currentRow--;
+                    totalElevChange+=down;
+                }
+                else if(forward < down){
+                    totalElevChange+=forward;
+                }
+                else{
+                    int coinToss = (int)(Math.random()*2)+1;
+                    if (coinToss == 1){
+                        //move forward
+                        totalElevChange+= forward;
+                    }
+                    else{
+                        //move down
+                        currentRow--;
+                        totalElevChange+=down;
+                    }
+                }
+            }
+            //bottom
+            else if (currentRow == grid.length-1) {
+                int up = Math.abs(currentElev - grid[currentRow - 1][col + 1]);
+                int forward = Math.abs(currentElev - grid[currentRow][col + 1]);
+                if (up < forward){
+                    currentRow++;
+                    totalElevChange+=up;
+                }
+                else if(forward < up){
+                    totalElevChange+=forward;
+                }
+                else {
+                    int coinToss = (int) (Math.random() * 2) + 1;
+                    if (coinToss == 1) {
+                        //move forward
+                        totalElevChange += forward;
+                    } else {
+                        //move up
+                        currentRow++;
+                        totalElevChange += up;
+                    }
+                }
+            }
+            //Regular procedure
+            else {
+                int up = Math.abs(currentElev - grid[currentRow - 1][col + 1]);
+                int down = Math.abs(currentElev - grid[currentRow + 1][col + 1]);
+                int forward = Math.abs(currentElev - grid[currentRow][col + 1]);
+                if (up < down && up < forward) {
+                    currentRow++;
+                    totalElevChange += up;
+                } else if (down < up && down < forward) {
+                    currentRow--;
+                    totalElevChange += down;
+                } else if (down == up && down < forward) {
+                    int coinToss = (int) (Math.random() * 2) + 1;
+                    if (coinToss == 1) {
+                        //move up
+                        currentRow++;
+                        totalElevChange += up;
+                    } else {
+                        //move down
+                        currentRow--;
+                        totalElevChange += down;
+                    }
+                } else {
+                    totalElevChange += forward;
+                }
+            }
+            // fill
+            g.fillRect(col+1,currentRow,1,1);
         }
-        return -1;
+        return totalElevChange;
     }
 
     /**
      * @return the index of the starting row for the lowest-elevation-change path in the entire grid.
      */
     public int indexOfLowestElevPath(Graphics g){
-        return -1;
+        int min = drawLowestElevPath(g,0);
+        int minIndex = 0;
+        for(int row=1; row<=grid.length;row++){
+            int currentTry = drawLowestElevPath(g,row);
+            if (currentTry< min){
+                min = currentTry;
+                minIndex = row;
+            }
+        }
+        return minIndex;
 
     }
 
