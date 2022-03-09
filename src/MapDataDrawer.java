@@ -105,7 +105,7 @@ public class MapDataDrawer
                 int down = Math.abs(currentElev - grid[currentRow + 1][col + 1]);
                 int forward = Math.abs(currentElev - grid[currentRow][col + 1]);
                 if (down < forward){
-                    currentRow--;
+                    currentRow++;
                     totalElevChange+=down;
                 }
                 else if(forward < down){
@@ -119,7 +119,7 @@ public class MapDataDrawer
                     }
                     else{
                         //move down
-                        currentRow--;
+                        currentRow++;
                         totalElevChange+=down;
                     }
                 }
@@ -129,7 +129,7 @@ public class MapDataDrawer
                 int up = Math.abs(currentElev - grid[currentRow - 1][col + 1]);
                 int forward = Math.abs(currentElev - grid[currentRow][col + 1]);
                 if (up < forward){
-                    currentRow++;
+                    currentRow--;
                     totalElevChange+=up;
                 }
                 else if(forward < up){
@@ -142,7 +142,7 @@ public class MapDataDrawer
                         totalElevChange += forward;
                     } else {
                         //move up
-                        currentRow++;
+                        currentRow--;
                         totalElevChange += up;
                     }
                 }
@@ -153,20 +153,20 @@ public class MapDataDrawer
                 int down = Math.abs(currentElev - grid[currentRow + 1][col + 1]);
                 int forward = Math.abs(currentElev - grid[currentRow][col + 1]);
                 if (up < down && up < forward) {
-                    currentRow++;
+                    currentRow--;
                     totalElevChange += up;
                 } else if (down < up && down < forward) {
-                    currentRow--;
+                    currentRow++;
                     totalElevChange += down;
                 } else if (down == up && down < forward) {
                     int coinToss = (int) (Math.random() * 2) + 1;
                     if (coinToss == 1) {
                         //move up
-                        currentRow++;
+                        currentRow--;
                         totalElevChange += up;
                     } else {
                         //move down
-                        currentRow--;
+                        currentRow++;
                         totalElevChange += down;
                     }
                 } else {
@@ -185,7 +185,7 @@ public class MapDataDrawer
     public int indexOfLowestElevPath(Graphics g){
         int min = drawLowestElevPath(g,0);
         int minIndex = 0;
-        for(int row=1; row<=grid.length;row++){
+        for(int row=1; row<=grid.length-1;row++){
             int currentTry = drawLowestElevPath(g,row);
             if (currentTry< min){
                 min = currentTry;
